@@ -1,3 +1,4 @@
+/* eslint-disable react/button-has-type */
 /* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react'
@@ -5,7 +6,11 @@ import { Popover, Transition } from '@headlessui/react'
 import {MenuIcon} from '@heroicons/react/outline'
 
 
-function Header() {
+type Props = {
+  modalOpener: () => void;
+}
+
+function Header({modalOpener}: Props) {
   return (
     <Popover className="relative bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
@@ -36,14 +41,14 @@ function Header() {
             </a>
           </Popover.Group>
           <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
-            <a href="#" className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
-              Sign in
-            </a>
-            <a
-              href="#"
-              className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+            <button
+              onClick={modalOpener}
+              className="whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
             >
-              Sign up
+              Post
+            </button>
+            <a href="#" className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900">
+              Sign in
             </a>
           </div>
         </div>
@@ -71,18 +76,18 @@ function Header() {
                 </a>
               </div>
               <div>
-                <a
-                  href="#"
-                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
-                >
-                  Sign up
-                </a>
                 <p className="mt-6 text-center text-base font-medium text-gray-500">
                   Existing customer?{' '}
                   <a href="#" className="text-indigo-600 hover:text-indigo-500">
                     Sign in
                   </a>
                 </p>
+                <button
+                  onClick={modalOpener}
+                  className="w-full flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+                >
+                  Post
+                </button>
               </div>
             </div>
           </div>
