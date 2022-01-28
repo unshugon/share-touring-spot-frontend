@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Header from './organisms/Header';
 
 /* eslint-disable react/function-component-definition */
 type Props = {
@@ -11,7 +12,7 @@ const Layout: React.FC<Props> = ({ children }: Props) => (
       <meta name="description" content="ツーリングスポット共有サイトです。" />
     </Head>
     <header>
-      <h1>hello</h1>
+      <Header />
     </header>
     <main>{children}</main>
     <footer>Share Touring Spot</footer>
