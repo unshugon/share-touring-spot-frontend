@@ -14,8 +14,8 @@ const Layout: React.FC<Props> = ({ children }: Props) => (
     <header>
       <Header />
     </header>
-    <main>{children}</main>
-    <footer>Share Touring Spot</footer>
+    <main className='min-h-screen'>{children}</main>
+    <footer className='text-center'>Share Touring Spot</footer>
   </div>
 );
 
