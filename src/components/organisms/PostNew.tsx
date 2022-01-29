@@ -74,6 +74,7 @@ function PostNew() {
                       <img
                         key={`${imageFile}_img`}
                         src={imageFile}
+                        alt="プレビュー画像"
                         className="h-full object-contain"
                       />
                     </div>
