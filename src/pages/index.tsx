@@ -1,7 +1,7 @@
 /* eslint-disable react/function-component-definition */
 import type { GetStaticProps, NextPage } from 'next';
-import { API_BASE_URL } from '../../util/constants';
-import { Post } from '../../util/type';
+import { API_BASE_URL } from '../../utils/constants';
+import { Post } from '../../utils/type';
 import PostCard from '../components/molecules/PostCard';
 
 type Props = {
