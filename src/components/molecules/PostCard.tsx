@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Post } from '../../../util/type';
+import { Post } from '../../../utils/type';
 import Modal from '../organisms/Modal';
 import PostDetail from '../organisms/PostDetail';
 
