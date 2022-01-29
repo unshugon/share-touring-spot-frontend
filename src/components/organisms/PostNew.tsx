@@ -1,31 +1,38 @@
-/* eslint-disable react/void-dom-elements-no-children */
+/* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable jsx-a11y/anchor-is-valid */
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useState } from 'react';
+import useInput from '../../hooks/useInput';
 
 function PostNew() {
-  const [imageFilesState, setImageFilesState] = useState<string[]>([]);
-  const handleChangeFile = (e: ChangeEvent<HTMLInputElement> | undefined) => {
-    if (!e) {
-      setImageFilesState([]);
+  const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
+  const [imageFilesState, setImageFilesState] = useState<File[]>([]);
+
+  const nameProperties = useInput('');
+  const descriptionProperties = useInput('');
+
+  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const { files } = e.target;
+    if (!files) {
+      setObjectUrlsState([]);
     } else {
-      const { files } = e.target;
-      console.log(files);
-      if (!files) {
-        setImageFilesState([]);
-      } else {
-        const imageFilesTemp: string[] = [];
-        for (let i = 0; i < files.length; i += 1) {
-          imageFilesTemp.push(window.URL.createObjectURL(files[i]));
-        }
-        setImageFilesState(imageFilesTemp);
+      const objectUrlTemp: string[] = [];
+      const imageFileTemp: File[] = [];
+      for (let i = 0; i < files.length; i += 1) {
+        imageFileTemp.push(files[i]);
+        objectUrlTemp.push(window.URL.createObjectURL(files[i]));
       }
+      setObjectUrlsState(objectUrlTemp);
+      setImageFilesState(imageFileTemp);
     }
   };
-  console.log(imageFilesState);
+  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(e, imageFilesState, nameProperties.value, descriptionProperties.value);
+  };
+
   return (
-    <form action="#" method="POST" className="w-full">
+    <form action="#" method="POST" className="w-full" onSubmit={onSubmit}>
       <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-3 sm:col-span-2">
@@ -39,6 +46,7 @@ function PostNew() {
                 id="company-website"
                 className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="例: 宮ヶ瀬ダム"
+                {...nameProperties}
               />
             </div>
           </div>
@@ -55,7 +63,7 @@ function PostNew() {
               rows={3}
               className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
               placeholder="例: 絶景です"
-              defaultValue=""
+              {...descriptionProperties}
             />
           </div>
         </div>
@@ -64,18 +72,18 @@ function PostNew() {
           <div>
             <label className="block text-sm font-medium text-gray-700">画像</label>
             <div className="mt-1 flex items-center">
-              <span className="min-h-14 min-w-14 inline-block overflow-hidden">
-                {imageFilesState.length > 0 ? (
-                  imageFilesState.slice(0, 3).map((imageFile) => (
+              <span className="min-h-14 min-w-14 overflow-hidden lg:flex lg:flex-row">
+                {objectUrlsState.length > 0 ? (
+                  objectUrlsState.slice(0, 3).map((imageFile) => (
                     <div
                       key={`${imageFile}_div`}
-                      className="aspect-square overflow-hidden rounded-lg sm:max-h-12 lg:max-h-16"
+                      className="aspect-1 overflow-hidden rounded-lg bg-gray-100 sm:mb-4 sm:max-h-12 lg:mr-4 lg:max-h-16"
                     >
                       <img
                         key={`${imageFile}_img`}
                         src={imageFile}
                         alt="プレビュー画像"
-                        className="h-full object-contain"
+                        className="aspect-1 object-contain sm:max-h-12 lg:max-h-16"
                       />
                     </div>
                   ))
