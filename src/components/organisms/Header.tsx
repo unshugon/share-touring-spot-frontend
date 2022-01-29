@@ -4,12 +4,15 @@
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { MenuIcon } from '@heroicons/react/outline';
+import { useSession, signIn, signOut } from 'next-auth/react';
 
 type Props = {
   modalOpener: () => void;
 };
 
 function Header({ modalOpener }: Props) {
+  const { status } = useSession();
+
   return (
     <Popover className="relative bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -45,12 +48,27 @@ function Header({ modalOpener }: Props) {
             >
               Post
             </button>
-            <a
-              href="#"
-              className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-            >
-              Sign in
-            </a>
+            {status === 'authenticated' ? (
+              <button
+                type="button"
+                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                onClick={() => signOut()}
+              >
+                Sign out
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                onClick={() =>
+                  signIn('google', {
+                    callbackUrl: 'http://localhost:3000/api/auth/callback/google',
+                  })
+                }
+              >
+                Sign in
+              </button>
+            )}
           </div>
         </div>
       </div>
