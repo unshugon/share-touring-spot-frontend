@@ -5,6 +5,7 @@ import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { MenuIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
+import { useRouter } from 'next/router';
 
 type Props = {
   toggleModalOpen: () => void;
@@ -12,20 +13,21 @@ type Props = {
 
 function Header({ toggleModalOpen: modalOpener }: Props) {
   const { status } = useSession();
+  const router = useRouter();
 
   return (
     <Popover className="relative bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <a href="#">
+            <button onClick={() => router.push('/')}>
               <span className="sr-only">Workflow</span>
               <img
                 className="h-8 w-auto sm:h-10"
                 src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
                 alt=""
               />
-            </a>
+            </button>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
             <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -60,11 +62,7 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
               <button
                 type="button"
                 className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-                onClick={() =>
-                  signIn('google', {
-                    callbackUrl: 'http://localhost:3000/api/auth/callback/google',
-                  })
-                }
+                onClick={() => signIn()}
               >
                 Sign in
               </button>
