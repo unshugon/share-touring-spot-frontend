@@ -1,11 +1,11 @@
 /* eslint-disable react/button-has-type */
-/* eslint-disable @next/next/no-img-element */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
 import { MenuIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 type Props = {
   toggleModalOpen: () => void;
@@ -20,14 +20,14 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <button onClick={() => router.push('/')}>
-              <span className="sr-only">Workflow</span>
-              <img
-                className="h-8 w-auto sm:h-10"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
-                alt=""
-              />
-            </button>
+            <Image
+              src="/main_icon.png"
+              alt="ヘッダーアイコン"
+              width="50px"
+              height="50px"
+              className="cursor-pointer"
+              onClick={() => router.push('/')}
+            />
           </div>
           <div className="-my-2 -mr-2 md:hidden">
             <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-slate-900">
