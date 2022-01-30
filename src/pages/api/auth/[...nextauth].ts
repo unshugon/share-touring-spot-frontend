@@ -11,9 +11,12 @@ import axios from 'axios';
 
 export const refreshToken = async (refresh_token: string) => {
   try {
-    const response = await axios.post('http://localhost:8000/api/auth/token/refresh/', {
-      refresh: refresh_token,
-    });
+    const response = await axios.post(
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/token/refresh/`,
+      {
+        refresh: refresh_token,
+      },
+    );
 
     const { access, refresh } = response.data;
     return [access, refresh];
@@ -40,10 +43,13 @@ export default NextAuth({
           const { access_token, id_token } = account;
 
           try {
-            const response = await axios.post('http://localhost:8000/api/social/login/google', {
-              access_token,
-              id_token,
-            });
+            const response = await axios.post(
+              `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/social/login/google`,
+              {
+                access_token,
+                id_token,
+              },
+            );
 
             token = {
               ...token,

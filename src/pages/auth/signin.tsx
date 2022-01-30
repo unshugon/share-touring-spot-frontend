@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -31,7 +32,7 @@ const signin = () => {
           className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
           onClick={() =>
             signIn('google', {
-              callbackUrl: 'http://localhost:3000',
+              callbackUrl: `${process.env.NEXT_PUBLIC_CLIENT_BASE_URL}`,
             })
           }
         >
