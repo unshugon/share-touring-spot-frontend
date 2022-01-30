@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { useState } from 'react';
 import { Post } from '../../../utils/type';
 import Modal from '../organisms/Modal';
@@ -9,12 +10,16 @@ type Props = {
 
 function PostCard({ post }: Props) {
   const [open, setOpen] = useState<boolean>(false);
+  const { id, title, content, image } = post;
+
   return (
-    <div key={post.id} className="group relative">
+    <div key={id} className="group relative">
       <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
-        <img
-          src={post.image}
-          alt={post.title}
+        <Image
+          src={image}
+          alt={title}
+          layout="fill"
+          objectFit="contain"
           className="h-full w-full object-contain object-center lg:h-full lg:w-full"
         />
       </div>
@@ -26,9 +31,9 @@ function PostCard({ post }: Props) {
               <PostDetail post={post} />
             </Modal>
           </h3>
-          <p className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300">{post.title}</p>
+          <p className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300">{title}</p>
         </div>
-        <p className="text-sm text-gray-900 dark:text-gray-400">{post.content}</p>
+        <p className="text-sm text-gray-900 dark:text-gray-400">{content}</p>
       </div>
     </div>
   );
