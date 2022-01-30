@@ -7,10 +7,10 @@ import { MenuIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 
 type Props = {
-  modalOpener: () => void;
+  toggleModalOpen: () => void;
 };
 
-function Header({ modalOpener }: Props) {
+function Header({ toggleModalOpen: modalOpener }: Props) {
   const { status } = useSession();
 
   return (

@@ -1,12 +1,23 @@
+/* eslint-disable react/function-component-definition */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import sendPost from '../../api/sendPost';
 import useInput from '../../hooks/useInput';
 
-function PostNew() {
-  const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
+type Props = {
+  toggleModalOpen: () => void;
+};
+
+const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
+  const router = useRouter();
+  const { data: session, status } = useSession();
   const [imageFilesState, setImageFilesState] = useState<File[]>([]);
+  const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
 
   const nameProperties = useInput('');
   const descriptionProperties = useInput('');
@@ -16,19 +27,26 @@ function PostNew() {
     if (!files) {
       setObjectUrlsState([]);
     } else {
-      const objectUrlTemp: string[] = [];
-      const imageFileTemp: File[] = [];
+      const imageFilesTemp: File[] = [];
+      const objectUrlsTemp: string[] = [];
       for (let i = 0; i < files.length; i += 1) {
-        imageFileTemp.push(files[i]);
-        objectUrlTemp.push(window.URL.createObjectURL(files[i]));
+        imageFilesTemp.push(files[i]);
+        objectUrlsTemp.push(window.URL.createObjectURL(files[i]));
       }
-      setObjectUrlsState(objectUrlTemp);
-      setImageFilesState(imageFileTemp);
+      setImageFilesState(imageFilesTemp);
+      setObjectUrlsState(objectUrlsTemp);
     }
   };
-  const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+
+  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e, imageFilesState, nameProperties.value, descriptionProperties.value);
+    await sendPost(session, status, {
+      title: nameProperties.value,
+      content: descriptionProperties.value,
+      images: imageFilesState,
+    });
+    toggleModalOpen();
+    router.push('/');
   };
 
   return (
@@ -46,6 +64,7 @@ function PostNew() {
                 id="company-website"
                 className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 placeholder="例: 宮ヶ瀬ダム"
+                required
                 {...nameProperties}
               />
             </div>
@@ -97,7 +116,7 @@ function PostNew() {
                 id="image-upload"
                 className="hidden"
                 onChange={handleChangeFile}
-                multiple
+                required
               />
               <label
                 htmlFor="image-upload"
@@ -152,6 +171,6 @@ function PostNew() {
       </div>
     </form>
   );
-}
+};
 
 export default PostNew;
