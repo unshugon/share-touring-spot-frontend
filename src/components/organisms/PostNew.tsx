@@ -4,6 +4,7 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
 
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
 import sendPost from '../../api/sendPost';
@@ -105,13 +106,16 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                   objectUrlsState.slice(0, 3).map((imageFile) => (
                     <div
                       key={`${imageFile}_div`}
-                      className="aspect-1 overflow-hidden rounded-lg bg-gray-100 sm:mb-4 sm:max-h-12 lg:mr-4 lg:max-h-16"
+                      className="aspect-1 overflow-hidden rounded-lg bg-gray-100 sm:mb-4 sm:max-h-12 lg:mb-0 lg:mr-4 lg:max-h-16"
                     >
-                      <img
+                      <Image
                         key={`${imageFile}_img`}
                         src={imageFile}
                         alt="プレビュー画像"
-                        className="aspect-1 object-contain sm:max-h-12 lg:max-h-16"
+                        width={180}
+                        height={180}
+                        objectFit="contain"
+                        className="aspect-1 sm:max-h-12 lg:max-h-40"
                       />
                     </div>
                   ))
