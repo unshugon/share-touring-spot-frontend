@@ -11,7 +11,7 @@ import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
-const signin = () => {
+function SignIn() {
   const router = useRouter();
   return (
     <div className="flex min-h-screen items-center justify-center py-12 px-4 dark:bg-slate-900 sm:px-6 lg:px-8">
@@ -44,6 +44,6 @@ const signin = () => {
       </div>
     </div>
   );
-};
+}
 
-export default signin;
+export default SignIn;
