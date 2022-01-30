@@ -16,7 +16,7 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
   const router = useRouter();
 
   return (
-    <Popover className="relative bg-white">
+    <Popover className="relative bg-white dark:bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
@@ -30,30 +30,36 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
             </button>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
-            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+            <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-slate-900">
               <span className="sr-only">Open menu</span>
               <MenuIcon className="h-6 w-6" aria-hidden="true" />
             </Popover.Button>
           </div>
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
-            <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
+            <a
+              href="#"
+              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+            >
               Pricing
             </a>
-            <a href="#" className="text-base font-medium text-gray-500 hover:text-gray-900">
+            <a
+              href="#"
+              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+            >
               Docs
             </a>
           </Popover.Group>
           <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
             <button
               onClick={modalOpener}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300"
             >
               Post
             </button>
             {status === 'authenticated' ? (
               <button
                 type="button"
-                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
                 onClick={() => signOut()}
               >
                 Sign out
@@ -61,7 +67,7 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
             ) : (
               <button
                 type="button"
-                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
                 onClick={() => signIn()}
               >
                 Sign in
@@ -84,14 +90,20 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
           focus
           className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
         >
-          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-slate-900">
             <div className="space-y-6 py-6 px-5">
               <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <a href="#" className="text-base font-medium text-gray-900 hover:text-gray-700">
+                <a
+                  href="#"
+                  className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
+                >
                   Pricing
                 </a>
 
-                <a href="#" className="text-base font-medium text-gray-900 hover:text-gray-700">
+                <a
+                  href="#"
+                  className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
+                >
                   Docs
                 </a>
               </div>
@@ -104,7 +116,7 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
                 </p>
                 <button
                   onClick={modalOpener}
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
+                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300 dark:hover:text-gray-400"
                 >
                   Post
                 </button>

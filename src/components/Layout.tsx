@@ -29,7 +29,9 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       <Modal open={open} setOpen={setOpen}>
         <PostNew toggleModalOpen={toggleModalOpen} />
       </Modal>
-      <footer className="text-center">Share Touring Spot</footer>
+      <footer className="text-center dark:bg-slate-900 dark:text-gray-300">
+        Share Touring Spot
+      </footer>
     </div>
   );
 };

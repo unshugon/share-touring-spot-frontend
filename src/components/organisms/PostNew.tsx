@@ -51,10 +51,13 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
 
   return (
     <form action="#" method="POST" className="w-full" onSubmit={onSubmit}>
-      <div className="space-y-6 bg-white px-4 py-5 sm:p-6">
+      <div className="space-y-6 bg-white px-4 py-5 dark:bg-slate-900 sm:p-6">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-3 sm:col-span-2">
-            <label htmlFor="company-website" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="company-website"
+              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+            >
               名称
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
@@ -62,7 +65,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                 type="text"
                 name="company-website"
                 id="company-website"
-                className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-300 dark:placeholder-gray-500 sm:text-sm"
                 placeholder="例: 宮ヶ瀬ダム"
                 required
                 {...nameProperties}
@@ -72,7 +75,10 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
         </div>
 
         <div>
-          <label htmlFor="about" className="block text-sm font-medium text-gray-700">
+          <label
+            htmlFor="about"
+            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+          >
             おすすめポイント
           </label>
           <div className="mt-1">
@@ -80,7 +86,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
               id="about"
               name="about"
               rows={3}
-              className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+              className="mt-1 block w-full rounded-md border border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-300 dark:placeholder-gray-500 sm:text-sm"
               placeholder="例: 絶景です"
               required
               {...descriptionProperties}
@@ -90,7 +96,9 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
 
         <div className="grid grid-cols-2 gap-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700">画像</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              画像
+            </label>
             <div className="mt-1 flex items-center">
               <span className="min-h-14 min-w-14 overflow-hidden lg:flex lg:flex-row">
                 {objectUrlsState.length > 0 ? (
@@ -108,7 +116,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                     </div>
                   ))
                 ) : (
-                  <p>画像を選択してください</p>
+                  <p className="text-gray-700 dark:text-gray-400">画像を選択してください</p>
                 )}
               </span>
               <input
@@ -121,7 +129,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
               />
               <label
                 htmlFor="image-upload"
-                className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-900 dark:text-gray-300 dark:hover:bg-slate-800"
               >
                 画像を選択
               </label>
@@ -129,7 +137,9 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">位置情報</label>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              位置情報
+            </label>
             <div className="mt-1 flex justify-center rounded-md border-2 border-solid border-gray-300 px-6 pt-5 pb-6">
               <div className="space-y-1 text-center">
                 <svg
@@ -149,7 +159,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                 <div className="flex text-sm text-gray-600">
                   <label
                     htmlFor="file-upload"
-                    className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
+                    className="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500 dark:bg-slate-900"
                   >
                     <span>Upload a file</span>
                     <input id="file-upload" name="file-upload" type="file" className="sr-only" />
@@ -162,10 +172,10 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
           </div>
         </div>
       </div>
-      <div className="bg-white px-4 py-3 text-right sm:px-6">
+      <div className="bg-white px-4 py-3 text-right dark:bg-slate-900 sm:px-6">
         <button
           type="submit"
-          className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
         >
           送信
         </button>

@@ -9,7 +9,7 @@ type Props = {
 };
 
 const Home: NextPage<Props> = ({ posts }: Props) => (
-  <div className="bg-white">
+  <div className="bg-white dark:bg-slate-900">
     <div className="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
       <h2 className="text-2xl font-extrabold tracking-tight text-gray-900">
         ツーリングスポット一覧
