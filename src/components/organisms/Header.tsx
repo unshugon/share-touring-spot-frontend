@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react';
@@ -12,7 +13,7 @@ type Props = {
 };
 
 function Header({ toggleModalOpen: modalOpener }: Props) {
-  const { status } = useSession();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
   return (
@@ -36,18 +37,20 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
             </Popover.Button>
           </div>
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
-            <a
-              href="#"
+            <button
+              type="button"
               className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+              onClick={() => router.push('/')}
             >
-              Pricing
-            </a>
-            <a
-              href="#"
+              Home
+            </button>
+            <button
+              type="button"
               className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+              onClick={() => router.push('/')}
             >
-              Docs
-            </a>
+              Map
+            </button>
           </Popover.Group>
           <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
             <button
@@ -57,13 +60,32 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
               Post
             </button>
             {status === 'authenticated' ? (
-              <button
-                type="button"
-                className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
-                onClick={() => signOut()}
-              >
-                Sign out
-              </button>
+              <>
+                {session && session.user && session.user.image && (
+                  <div className="relative ml-8 rounded-full">
+                    <Image
+                      src={
+                        process.env.NODE_ENV === `development`
+                          ? '/main_icon.png'
+                          : session?.user?.image
+                      }
+                      alt="user-icon"
+                      height={30}
+                      width={30}
+                      objectFit="contain"
+                    />
+                  </div>
+                )}
+
+                <p className="pl-2 text-gray-500 dark:text-gray-300">{session?.user?.name}</p>
+                <button
+                  type="button"
+                  className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+                  onClick={() => signOut()}
+                >
+                  Sign out
+                </button>
+              </>
             ) : (
               <button
                 type="button"
@@ -93,27 +115,62 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
           <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-slate-900">
             <div className="space-y-6 py-6 px-5">
               <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <a
-                  href="#"
+                <button
+                  type="button"
                   className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
+                  onClick={() => router.push('/')}
                 >
-                  Pricing
-                </a>
+                  Home
+                </button>
 
-                <a
-                  href="#"
+                <button
+                  type="button"
                   className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
+                  onClick={() => router.push('/')}
                 >
-                  Docs
-                </a>
+                  Map
+                </button>
               </div>
               <div>
-                <p className="mt-6 text-center text-base font-medium text-gray-500">
-                  Existing customer?{' '}
-                  <a href="#" className="text-indigo-600 hover:text-indigo-500">
-                    Sign in
-                  </a>
-                </p>
+                {status === 'authenticated' ? (
+                  <>
+                    {session && session.user && session.user.image && (
+                      <div className="relative rounded-full">
+                        <Image
+                          src={
+                            process.env.NODE_ENV === `development`
+                              ? '/main_icon.png'
+                              : session?.user?.image
+                          }
+                          alt="user-icon"
+                          height={30}
+                          width={30}
+                          objectFit="contain"
+                        />
+                      </div>
+                    )}
+                    <p className="text-gray-700 dark:text-gray-300">{session?.user?.name}</p>
+                    <p className="mt-6 text-center text-base font-medium text-gray-500">
+                      <button
+                        type="button"
+                        className="text-indigo-600 hover:text-indigo-500"
+                        onClick={() => signOut()}
+                      >
+                        Sign out
+                      </button>
+                    </p>
+                  </>
+                ) : (
+                  <p className="mt-6 text-center text-base font-medium text-gray-500">
+                    <button
+                      type="button"
+                      className="text-indigo-600 hover:text-indigo-500"
+                      onClick={() => signIn()}
+                    >
+                      Sign in
+                    </button>
+                  </p>
+                )}
                 <button
                   onClick={modalOpener}
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300 dark:hover:text-gray-400"
