@@ -16,7 +16,7 @@ function PostCard({ post }: Props) {
     <div key={id} className="group relative">
       <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
         <Image
-          src={image}
+          src={process.env.NODE_ENV === `development` ? '/main_icon.png' : image}
           alt={title}
           layout="fill"
           objectFit="contain"

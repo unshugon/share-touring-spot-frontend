@@ -11,7 +11,7 @@ function PostDetail({ post }: Props) {
     <div className="grid w-full grid-cols-1 items-start gap-y-8 gap-x-6 sm:grid-cols-12 lg:gap-x-8">
       <div className="aspect-w-2 aspect-h-3 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:col-span-4 lg:col-span-5">
         <Image
-          src={image}
+          src={process.env.NODE_ENV === `development` ? '/main_icon.png' : image}
           layout="fill"
           objectFit="contain"
           alt={title}
