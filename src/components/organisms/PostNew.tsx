@@ -51,7 +51,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
   };
 
   return (
-    <form action="#" method="POST" className="w-full" onSubmit={onSubmit}>
+    <form action="#" method="POST" className="w-full" onSubmit={onSubmit} autoComplete="off">
       <div className="space-y-6 bg-white px-4 py-5 dark:bg-slate-900 sm:p-6">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-3 sm:col-span-2">
