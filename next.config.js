@@ -4,6 +4,9 @@ const nextConfig = {
   env: {
     FAVICON_URL: process.env.NODE_ENV === `development` ? `dev_favicon.svg` : `prod_favicon.svg`,
   },
+  images: {
+    domains: ['share-touring-spot-api.herokuapp.com'],
+  },
 };
 
 module.exports = nextConfig;
