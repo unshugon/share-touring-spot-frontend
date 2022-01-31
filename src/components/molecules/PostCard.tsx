@@ -31,9 +31,13 @@ function PostCard({ post }: Props) {
               <PostDetail post={post} />
             </Modal>
           </h3>
-          <p className="mt-1 text-sm font-medium text-gray-500 dark:text-gray-300">{title}</p>
+          <p className="mt-1 whitespace-nowrap pr-2 text-sm font-medium text-gray-500 dark:text-gray-300">
+            {title}
+          </p>
         </div>
-        <p className="text-sm text-gray-900 dark:text-gray-400">{content}</p>
+        <p className="mt-1 overflow-hidden text-ellipsis whitespace-nowrap text-sm text-gray-900 dark:text-gray-400">
+          {content}
+        </p>
       </div>
     </div>
   );
