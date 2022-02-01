@@ -7,6 +7,7 @@ import { MenuIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import { getImageSrc } from '../../../utils/utils';
 
 type Props = {
   toggleModalOpen: () => void;
@@ -64,11 +65,7 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
                 {session && session.user && session.user.image && (
                   <div className="relative ml-8 rounded-full">
                     <Image
-                      src={
-                        process.env.NODE_ENV === `development`
-                          ? '/main_icon.png'
-                          : session?.user?.image
-                      }
+                      src={getImageSrc(session.user.image)}
                       alt="user-icon"
                       height={30}
                       width={30}

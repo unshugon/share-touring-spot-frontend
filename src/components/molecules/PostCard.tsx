@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import { useState } from 'react';
 import { Post } from '../../../utils/type';
+import { getImageSrc } from '../../../utils/utils';
 import Modal from '../organisms/Modal';
 import PostDetail from '../organisms/PostDetail';
 
@@ -14,13 +15,14 @@ function PostCard({ post }: Props) {
 
   return (
     <div key={id} className="group relative">
-      <div className="min-h-80 aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
+      <div className="min-h-80  w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
         <Image
-          src={process.env.NODE_ENV === `development` ? '/main_icon.png' : image}
+          src={getImageSrc(image)}
           alt={title}
-          layout="fill"
-          objectFit="contain"
-          className="h-full w-full object-contain object-center lg:h-full lg:w-full"
+          layout="responsive"
+          objectFit="cover"
+          height="320px"
+          width="280px"
         />
       </div>
       <div className="mt-4 flex justify-between">
