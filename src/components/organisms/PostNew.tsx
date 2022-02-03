@@ -7,7 +7,10 @@ import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { ChangeEvent, FormEvent, useState } from 'react';
+import { Oval } from 'react-loader-spinner';
+import { useRecoilState } from 'recoil';
 import sendPost from '../../api/sendPost';
+import { isLoadingState } from '../../atoms';
 import useInput from '../../hooks/useInput';
 
 type Props = {
@@ -17,12 +20,12 @@ type Props = {
 const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [isLoading, setIsLoading] = useRecoilState<boolean>(isLoadingState);
   const [imageFilesState, setImageFilesState] = useState<File[]>([]);
   const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
 
   const nameProperties = useInput('');
   const descriptionProperties = useInput('');
-
   const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files) {
@@ -41,12 +44,14 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
     await sendPost(session, status, {
       title: nameProperties.value,
       content: descriptionProperties.value,
       images: imageFilesState,
     });
     toggleModalOpen();
+    setIsLoading(false);
     router.push('/');
   };
 
@@ -155,9 +160,10 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       <div className="bg-white px-4 py-3 text-right dark:bg-slate-900 sm:px-6">
         <button
           type="submit"
+          disabled={isLoading}
           className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
         >
-          送信
+          {isLoading ? <Oval height={14} width={20} strokeWidth={10} color="#ffffff" /> : '送信'}
         </button>
       </div>
     </form>
