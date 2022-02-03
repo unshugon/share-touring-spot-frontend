@@ -8,6 +8,7 @@ const nextConfig = {
     domains: [
       'share-touring-spot-api.herokuapp.com',
       'share-touring-spot-api-assets.s3.amazonaws.com',
+      'googleusercontent.com',
     ],
   },
 };
