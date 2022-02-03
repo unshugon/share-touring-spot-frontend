@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 import axios from 'axios';
 import { Session } from 'next-auth';
+import imageCompression from 'browser-image-compression';
 import { PostForm, SessionStatus } from '../../utils/type';
 
 const sendPost = async (session: Session | null, status: SessionStatus, post: PostForm) => {
@@ -8,8 +9,18 @@ const sendPost = async (session: Session | null, status: SessionStatus, post: Po
   const formData = new FormData();
   formData.append('title', title);
   formData.append('content', content);
-  images.forEach((image) => {
-    formData.append('image', image);
+  const compressedFiles = await Promise.all(
+    images.map(async (image) => {
+      const compressOption = {
+        maxSizeMB: 0.1,
+        maxWidthOrHeight: 450,
+      };
+      return imageCompression(image, compressOption);
+    }),
+  );
+
+  compressedFiles.forEach((image) => {
+    formData.append('image', image, image.name);
   });
 
   try {
