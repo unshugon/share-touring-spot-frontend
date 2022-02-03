@@ -12,7 +12,7 @@ const sendPost = async (session: Session | null, status: SessionStatus, post: Po
   const compressedFiles = await Promise.all(
     images.map(async (image) => {
       const compressOption = {
-        maxSizeMB: 0.1,
+        maxSizeMB: 0.2,
         maxWidthOrHeight: 450,
       };
       return imageCompression(image, compressOption);
