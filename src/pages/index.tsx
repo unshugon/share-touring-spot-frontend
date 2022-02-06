@@ -3,6 +3,7 @@
 import type { GetStaticProps, NextPage } from 'next';
 import { useEffect } from 'react';
 import useSWR, { Fetcher, Key } from 'swr';
+import { Oval } from 'react-loader-spinner';
 import { API_BASE_URL } from '../../utils/constants';
 import { Post } from '../../utils/type';
 import { getAllPosts } from '../api/getPosts';
@@ -32,12 +33,23 @@ const Home: NextPage<Props> = ({ fallbackPosts: staticPosts }: Props) => {
         <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 dark:text-gray-300">
           ツーリングスポット一覧
         </h2>
-
-        <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
+        {posts ? (
+          <div className="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+            {posts.map((post) => (
+              <PostCard key={post.id} post={post} />
+            ))}
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <Oval
+              height={500}
+              width={80}
+              strokeWidth={10}
+              color="#d1d5db"
+              secondaryColor="##0f172a"
+            />
+          </div>
+        )}
       </div>
     </div>
   );
