@@ -11,8 +11,8 @@ type Props = {
 function PostDetail({ post }: Props) {
   const { title, content, image, location } = post;
   return (
-    <div className="grid w-full grid-cols-1 items-start gap-y-8 gap-x-6 sm:grid-cols-12 lg:gap-x-8">
-      <div className="aspect-w-2 aspect-h-3 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:col-span-4 lg:col-span-5">
+    <div className="grid w-full grid-cols-1 grid-rows-3 items-start gap-x-6 sm:grid-cols-12 sm:gap-y-8 md:grid-rows-none lg:gap-x-8">
+      <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:col-span-4 md:aspect-w-2 md:aspect-h-3 lg:col-span-5">
         <Image
           src={getImageSrc(image)}
           layout="fill"
@@ -27,13 +27,13 @@ function PostDetail({ post }: Props) {
         </h2>
 
         <section aria-labelledby="options-heading" className="mt-10">
-          <div className="h-80 rounded-md border-2 dark:border-slate-800">
+          <div className="h-48 rounded-md border-2 dark:border-slate-800 md:h-80">
             <p className="max-h-full overflow-y-scroll break-words text-gray-900 dark:text-gray-300">
               {content}
             </p>
           </div>
           <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
-            <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+            <div className="items-center justify-end md:flex md:flex-1 lg:w-0">
               {location && (
                 <Link
                   href={`https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}&travelmode=driving`}
