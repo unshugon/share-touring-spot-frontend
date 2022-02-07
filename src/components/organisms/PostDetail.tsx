@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import Image from 'next/image';
+import Link from 'next/link';
 import { Post } from '../../../utils/type';
 import { getImageSrc } from '../../../utils/utils';
 
@@ -7,7 +9,7 @@ type Props = {
 };
 
 function PostDetail({ post }: Props) {
-  const { title, content, image } = post;
+  const { title, content, image, location } = post;
   return (
     <div className="grid w-full grid-cols-1 items-start gap-y-8 gap-x-6 sm:grid-cols-12 lg:gap-x-8">
       <div className="aspect-w-2 aspect-h-3 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:col-span-4 lg:col-span-5">
@@ -32,12 +34,15 @@ function PostDetail({ post }: Props) {
           </div>
           <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
             <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300"
-              >
-                ここへ行く
-              </button>
+              {location && (
+                <Link
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}&travelmode=driving`}
+                >
+                  <a className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300">
+                    ここへ行く
+                  </a>
+                </Link>
+              )}
             </div>
           </div>
         </section>

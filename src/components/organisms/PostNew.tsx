@@ -6,15 +6,17 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FormEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useRecoilState } from 'recoil';
+import { LocationType } from '../../../utils/type';
 import sendPost from '../../api/sendPost';
 import { isLoadingState } from '../../atoms';
 import useInput from '../../hooks/useInput';
+import InputLocation from '../molecules/InputLocation';
 
 type Props = {
-  toggleModalOpen: () => void;
+  toggleModalOpen: (state?: boolean) => void;
 };
 
 const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
@@ -23,10 +25,10 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
   const [isLoading, setIsLoading] = useRecoilState<boolean>(isLoadingState);
   const [imageFilesState, setImageFilesState] = useState<File[]>([]);
   const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
-
+  const [locationState, setLocationState] = useState<LocationType>({ lat: 0, lng: 0 });
   const nameProperties = useInput('');
   const descriptionProperties = useInput('');
-  const handleChangeFile = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
     if (!files) {
       setObjectUrlsState([]);
@@ -40,20 +42,34 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       setImageFilesState(imageFilesTemp);
       setObjectUrlsState(objectUrlsTemp);
     }
-  };
+  }, []);
 
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsLoading(true);
-    await sendPost(session, status, {
-      title: nameProperties.value,
-      content: descriptionProperties.value,
-      images: imageFilesState,
-    });
-    toggleModalOpen();
-    setIsLoading(false);
-    router.push('/');
-  };
+  const onSubmit = useCallback(
+    async (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      setIsLoading(true);
+      await sendPost(session, status, {
+        title: nameProperties.value,
+        content: descriptionProperties.value,
+        images: imageFilesState,
+        locate: locationState,
+      });
+      toggleModalOpen(false);
+      setIsLoading(false);
+      router.push('/');
+    },
+    [
+      descriptionProperties.value,
+      imageFilesState,
+      nameProperties.value,
+      router,
+      session,
+      setIsLoading,
+      status,
+      toggleModalOpen,
+      locationState,
+    ],
+  );
 
   return (
     <form action="#" method="POST" className="w-full" onSubmit={onSubmit} autoComplete="off">
@@ -67,14 +83,18 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
               名称
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <input
-                type="text"
-                name="company-website"
-                id="company-website"
-                className="block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-300 dark:placeholder-gray-500 sm:text-sm"
-                placeholder="例: 宮ヶ瀬ダム"
-                required
-                {...nameProperties}
+              <InputLocation
+                inputPropaties={{
+                  type: 'text',
+                  name: 'company-website',
+                  id: 'company-website',
+                  className:
+                    'block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-300 dark:placeholder-gray-500 sm:text-sm',
+                  placeholder: '例: 宮ヶ瀬ダム',
+                  required: true,
+                  ...nameProperties,
+                }}
+                setLocation={setLocationState}
               />
             </div>
           </div>
@@ -100,18 +120,18 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-6">
+        <div className="grid grid-cols-1">
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               画像
             </label>
             <div className="mt-1 flex items-center">
-              <span className="min-h-14 min-w-14 overflow-hidden lg:flex lg:flex-row">
-                {objectUrlsState.length > 0 ? (
-                  objectUrlsState.slice(0, 3).map((imageFile) => (
+              {objectUrlsState.length > 0 ? (
+                <span className="min-h-14 min-w-14 grid grid-cols-4 gap-6 overflow-hidden lg:flex lg:flex-row">
+                  {objectUrlsState.slice(0, 3).map((imageFile) => (
                     <div
                       key={`${imageFile}_div`}
-                      className="aspect-1 overflow-hidden rounded-lg bg-gray-100 sm:mb-4 sm:max-h-12 lg:mb-0 lg:mr-4 lg:max-h-16"
+                      className="overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:h-12 sm:w-12 md:h-20 md:w-20 lg:h-16 lg:w-16"
                     >
                       <Image
                         key={`${imageFile}_img`}
@@ -123,45 +143,34 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                         className="aspect-1 sm:max-h-12 lg:max-h-40"
                       />
                     </div>
-                  ))
-                ) : (
-                  <p className="text-gray-700 dark:text-gray-400">画像を選択してください</p>
-                )}
-              </span>
-              <input
-                type="file"
-                accept="image/*"
-                id="image-upload"
-                className="hidden"
-                onChange={handleChangeFile}
-                required
-              />
-              <label
-                htmlFor="image-upload"
-                className="ml-5 rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:bg-slate-900 dark:text-gray-300 dark:hover:bg-slate-800"
-              >
-                画像を選択
-              </label>
-            </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              位置情報
-            </label>
-            <div className="mt-1 flex justify-center rounded-md border-2 border-solid border-gray-300 px-6 pt-5 pb-6">
-              <div className="space-y-1 text-center text-gray-700 dark:text-gray-300">
-                マップ表示予定
-              </div>
+                  ))}
+                </span>
+              ) : (
+                <p className="text-gray-700 dark:text-gray-400">画像を選択してください</p>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <div className="bg-white px-4 py-3 text-right dark:bg-slate-900 sm:px-6">
+      <div className="flex justify-end gap-6 bg-white px-4 py-3 text-right dark:bg-slate-900 ">
+        <input
+          type="file"
+          accept="image/*"
+          id="image-upload"
+          className="hidden"
+          onChange={handleChangeFile}
+          required
+        />
+        <label
+          htmlFor="image-upload"
+          className="inline-flex justify-center justify-self-end rounded-md border border-solid  py-2 px-4 text-sm font-medium text-gray-300 shadow-sm hover:cursor-pointer hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
+        >
+          画像を選択
+        </label>
         <button
           type="submit"
           disabled={isLoading}
-          className="inline-flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
+          className="inline-flex justify-center justify-self-end rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
         >
           {isLoading ? <Oval height={14} width={20} strokeWidth={10} color="#ffffff" /> : '送信'}
         </button>

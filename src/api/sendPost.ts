@@ -22,14 +22,17 @@ const sendPost = async (session: Session | null, status: SessionStatus, post: Po
   compressedFiles.forEach((image) => {
     formData.append('image', image, image.name);
   });
+  formData.append('locationtype', 'Point');
+  formData.append('latitude', String(post.locate.lat));
+  formData.append('longitude', String(post.locate.lng));
 
   try {
     if (session && status === 'authenticated') {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/posts/spots/new/`, formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/posts/spots/new`, formData, {
         headers: { Authorization: `Bearer ${session.accessToken}` },
       });
     } else {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/posts/spots/new/`, formData);
+      await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/posts/spots/new`, formData);
     }
   } catch (error) {
     // eslint-disable-next-line no-console
