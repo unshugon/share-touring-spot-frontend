@@ -12,7 +12,7 @@ type Props = {
 function Modal({ open, setOpen, children }: Props) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={setOpen}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={(e) => setOpen(!e)}>
         <div
           className="flex min-h-screen text-center md:block md:px-2 lg:px-4"
           style={{ fontSize: 0 }}
