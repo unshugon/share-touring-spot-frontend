@@ -12,9 +12,14 @@ type Props = {
 const Layout: React.FC<Props> = ({ children }: Props) => {
   const { asPath } = useRouter();
   const [open, setOpen] = useState<boolean>(false);
-  const toggleModalOpen = () => {
-    setOpen((prev) => !prev);
+  const toggleModalOpen = (state?: boolean) => {
+    if (state) {
+      setOpen(state);
+    } else {
+      setOpen((prev) => !prev);
+    }
   };
+
   return (
     <div>
       <Head>

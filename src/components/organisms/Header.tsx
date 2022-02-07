@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable react/button-has-type */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
@@ -10,10 +9,10 @@ import Image from 'next/image';
 import { getImageSrc } from '../../../utils/utils';
 
 type Props = {
-  toggleModalOpen: () => void;
+  toggleModalOpen: (state?: boolean) => void;
 };
 
-function Header({ toggleModalOpen: modalOpener }: Props) {
+function Header({ toggleModalOpen }: Props) {
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -55,7 +54,8 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
           </Popover.Group>
           <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
             <button
-              onClick={modalOpener}
+              type="button"
+              onClick={() => toggleModalOpen(true)}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300"
             >
               Post
@@ -169,7 +169,8 @@ function Header({ toggleModalOpen: modalOpener }: Props) {
                   </p>
                 )}
                 <button
-                  onClick={modalOpener}
+                  type="button"
+                  onClick={() => toggleModalOpen(false)}
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300 dark:hover:text-gray-400"
                 >
                   Post
