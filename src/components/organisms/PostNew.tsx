@@ -1,7 +1,6 @@
 /* eslint-disable react/function-component-definition */
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable jsx-a11y/label-has-associated-control */
 
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
@@ -26,7 +25,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
   const [imageFilesState, setImageFilesState] = useState<File[]>([]);
   const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
   const [locationState, setLocationState] = useState<LocationType>({ lat: 0, lng: 0 });
-  const nameProperties = useInput('');
+  const [titleState, setTitleState] = useState<string>('');
   const descriptionProperties = useInput('');
   const handleChangeFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
@@ -49,7 +48,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       e.preventDefault();
       setIsLoading(true);
       await sendPost(session, status, {
-        title: nameProperties.value,
+        title: titleState,
         content: descriptionProperties.value,
         images: imageFilesState,
         locate: locationState,
@@ -61,7 +60,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
     [
       descriptionProperties.value,
       imageFilesState,
-      nameProperties.value,
+      titleState,
       router,
       session,
       setIsLoading,
@@ -76,12 +75,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       <div className="space-y-6 bg-white px-4 py-5 dark:bg-slate-900 sm:p-6">
         <div className="grid grid-cols-3 gap-6">
           <div className="col-span-3 sm:col-span-2">
-            <label
-              htmlFor="company-website"
-              className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-              名称
-            </label>
+            <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">名称</p>
             <div className="mt-1 flex rounded-md shadow-sm">
               <InputLocation
                 inputPropaties={{
@@ -92,21 +86,20 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                     'block w-full flex-1 rounded-md border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-slate-800 dark:text-gray-300 dark:placeholder-gray-500 sm:text-sm',
                   placeholder: '例: 宮ヶ瀬ダム',
                   required: true,
-                  ...nameProperties,
+                  value: titleState,
                 }}
                 setLocation={setLocationState}
+                setTitleState={setTitleState}
+                titleState={titleState}
               />
             </div>
           </div>
         </div>
 
         <div>
-          <label
-            htmlFor="about"
-            className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-          >
+          <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             おすすめポイント
-          </label>
+          </p>
           <div className="mt-1">
             <textarea
               id="about"
@@ -122,9 +115,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
 
         <div className="grid grid-cols-1">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              画像
-            </label>
+            <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">画像</p>
             <div className="mt-1 flex items-center">
               {objectUrlsState.length > 0 ? (
                 <span className="min-h-14 min-w-14 grid grid-cols-4 gap-6 overflow-hidden lg:flex lg:flex-row">
@@ -153,18 +144,18 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
         </div>
       </div>
       <div className="flex justify-end gap-6 bg-white px-4 py-3 text-right dark:bg-slate-900 ">
-        <input
-          type="file"
-          accept="image/*"
-          id="image-upload"
-          className="hidden"
-          onChange={handleChangeFile}
-          required
-        />
         <label
           htmlFor="image-upload"
           className="inline-flex justify-center justify-self-end rounded-md border border-solid  py-2 px-4 text-sm font-medium text-gray-300 shadow-sm hover:cursor-pointer hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
         >
+          <input
+            type="file"
+            accept="image/*"
+            id="image-upload"
+            className="hidden"
+            onChange={handleChangeFile}
+            required
+          />
           画像を選択
         </label>
         <button
