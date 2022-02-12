@@ -34,7 +34,7 @@ function PostDetail({ post }: Props) {
           </div>
           <div className="flex items-center justify-between py-6 md:justify-start md:space-x-10">
             <div className="items-center justify-end md:flex md:flex-1 lg:w-0">
-              {location && (
+              {location && location.lat !== 0 && location.lng !== 0 && (
                 <Link
                   href={`https://www.google.com/maps/dir/?api=1&destination=${location.lat},${location.lng}&travelmode=driving`}
                 >
