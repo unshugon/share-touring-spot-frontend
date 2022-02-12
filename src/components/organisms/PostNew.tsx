@@ -5,13 +5,14 @@
 import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import { ChangeEvent, FormEvent, useCallback, useState } from 'react';
+import { FormEvent, useCallback, useState } from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useRecoilState } from 'recoil';
 import { LocationType } from '../../../utils/type';
 import sendPost from '../../api/sendPost';
 import { isLoadingState } from '../../atoms';
 import useInput from '../../hooks/useInput';
+import usePreviewImage from '../../hooks/usePreviewImage';
 import InputLocation from '../molecules/InputLocation';
 
 type Props = {
@@ -22,26 +23,10 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [isLoading, setIsLoading] = useRecoilState<boolean>(isLoadingState);
-  const [imageFilesState, setImageFilesState] = useState<File[]>([]);
-  const [objectUrlsState, setObjectUrlsState] = useState<string[]>([]);
   const [locationState, setLocationState] = useState<LocationType>({ lat: 0, lng: 0 });
   const [titleState, setTitleState] = useState<string>('');
   const descriptionProperties = useInput('');
-  const handleChangeFile = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (!files) {
-      setObjectUrlsState([]);
-    } else {
-      const imageFilesTemp: File[] = [];
-      const objectUrlsTemp: string[] = [];
-      for (let i = 0; i < files.length; i += 1) {
-        imageFilesTemp.push(files[i]);
-        objectUrlsTemp.push(window.URL.createObjectURL(files[i]));
-      }
-      setImageFilesState(imageFilesTemp);
-      setObjectUrlsState(objectUrlsTemp);
-    }
-  }, []);
+  const { imageFiles, previewUrls, handleChangeFile } = usePreviewImage();
 
   const onSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -50,7 +35,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       await sendPost(session, status, {
         title: titleState,
         content: descriptionProperties.value,
-        images: imageFilesState,
+        images: imageFiles,
         locate: locationState,
       });
       toggleModalOpen(false);
@@ -59,7 +44,7 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
     },
     [
       descriptionProperties.value,
-      imageFilesState,
+      imageFiles,
       titleState,
       router,
       session,
@@ -97,9 +82,9 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
         </div>
 
         <div>
-          <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">
             おすすめポイント
-          </p>
+          </span>
           <div className="mt-1">
             <textarea
               id="about"
@@ -115,11 +100,11 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
 
         <div className="grid grid-cols-1">
           <div>
-            <p className="block text-sm font-medium text-gray-700 dark:text-gray-300">画像</p>
+            <span className="block text-sm font-medium text-gray-700 dark:text-gray-300">画像</span>
             <div className="mt-1 flex items-center">
-              {objectUrlsState.length > 0 ? (
+              {previewUrls.length > 0 ? (
                 <span className="min-h-14 min-w-14 grid grid-cols-4 gap-6 overflow-hidden lg:flex lg:flex-row">
-                  {objectUrlsState.slice(0, 3).map((imageFile) => (
+                  {previewUrls.slice(0, 3).map((imageFile) => (
                     <div
                       key={`${imageFile}_div`}
                       className="overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:h-12 sm:w-12 md:h-20 md:w-20 lg:h-16 lg:w-16"
@@ -137,7 +122,20 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
                   ))}
                 </span>
               ) : (
-                <p className="text-gray-700 dark:text-gray-400">画像を選択してください</p>
+                <label
+                  htmlFor="select-image-area"
+                  className="text-gray-700 hover:cursor-pointer dark:text-gray-400"
+                >
+                  <input
+                    type="file"
+                    accept="image/*"
+                    id="select-image-area"
+                    className="hidden"
+                    onChange={handleChangeFile}
+                    required
+                  />
+                  画像を選択してください
+                </label>
               )}
             </div>
           </div>
@@ -145,13 +143,13 @@ const PostNew: React.FC<Props> = ({ toggleModalOpen }: Props) => {
       </div>
       <div className="flex justify-end gap-6 bg-white px-4 py-3 text-right dark:bg-slate-900 ">
         <label
-          htmlFor="image-upload"
+          htmlFor="select-image-button"
           className="inline-flex justify-center justify-self-end rounded-md border border-solid  py-2 px-4 text-sm font-medium text-gray-300 shadow-sm hover:cursor-pointer hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:text-gray-300"
         >
           <input
             type="file"
             accept="image/*"
-            id="image-upload"
+            id="select-image-button"
             className="hidden"
             onChange={handleChangeFile}
             required
