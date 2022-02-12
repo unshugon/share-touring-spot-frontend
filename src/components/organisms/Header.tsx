@@ -21,7 +21,7 @@ const menuList = [
   {
     title: 'Map',
     icon: MapIcon,
-    link: '/',
+    link: '/map',
   },
 ];
 
