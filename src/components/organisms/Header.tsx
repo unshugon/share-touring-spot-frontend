@@ -153,7 +153,7 @@ function Header({ toggleModalOpen }: Props) {
                     <button
                       type="button"
                       className="-m-3 flex items-center rounded-md p-3"
-                      onClick={() => router.push('/')}
+                      onClick={() => router.push(menu.link)}
                       key={menu.title}
                     >
                       <menu.icon
