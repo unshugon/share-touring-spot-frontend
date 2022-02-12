@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { Fragment } from 'react';
 import { Popover, Transition } from '@headlessui/react';
-import { MenuIcon } from '@heroicons/react/outline';
+import { MenuIcon, XIcon, HomeIcon, MapIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
@@ -11,6 +11,19 @@ import { getImageSrc } from '../../../utils/utils';
 type Props = {
   toggleModalOpen: (state?: boolean) => void;
 };
+
+const menuList = [
+  {
+    title: 'Home',
+    icon: HomeIcon,
+    link: '/',
+  },
+  {
+    title: 'Map',
+    icon: MapIcon,
+    link: '/',
+  },
+];
 
 function Header({ toggleModalOpen }: Props) {
   const { data: session, status } = useSession();
@@ -36,22 +49,23 @@ function Header({ toggleModalOpen }: Props) {
             </Popover.Button>
           </div>
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
-            <button
-              type="button"
-              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
-              onClick={() => router.push('/')}
-            >
-              Home
-            </button>
-            <button
-              type="button"
-              className="text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
-              onClick={() => router.push('/')}
-            >
-              Map
-            </button>
+            {menuList.map((menu) => (
+              <button
+                type="button"
+                className="-m-3 flex items-start rounded-lg p-3"
+                onClick={() => router.push(menu.link)}
+                key={menu.title}
+              >
+                <menu.icon className="h-6 w-6 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                <div className="ml-4">
+                  <p className="text-base font-medium text-gray-900 dark:text-gray-300">
+                    {menu.title}
+                  </p>
+                </div>
+              </button>
+            ))}
           </Popover.Group>
-          <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+          <div className="hidden items-center justify-end gap-4 md:flex md:flex-1 lg:w-0">
             <button
               type="button"
               onClick={() => toggleModalOpen(true)}
@@ -61,23 +75,27 @@ function Header({ toggleModalOpen }: Props) {
             </button>
             {status === 'authenticated' ? (
               <>
-                {session && session.user && session.user.image && (
-                  <div className="ml-8 rounded-full">
-                    <Image
-                      src={getImageSrc(session.user.image)}
-                      alt="user-icon"
-                      height={30}
-                      width={30}
-                      className="rounded-full"
-                      objectFit="cover"
-                    />
+                {session && session.user && (
+                  <div className="-m-3 flex items-start p-3">
+                    {session?.user?.image && (
+                      <Image
+                        src={getImageSrc(session.user.image)}
+                        alt="user-icon"
+                        height={30}
+                        width={30}
+                        className="rounded-full"
+                        objectFit="cover"
+                      />
+                    )}
+                    <span className="pl-2 text-gray-500 hover:cursor-default dark:text-gray-300">
+                      {session?.user?.name}
+                    </span>
                   </div>
                 )}
 
-                <p className="pl-2 text-gray-500 dark:text-gray-300">{session?.user?.name}</p>
                 <button
                   type="button"
-                  className="ml-8 whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
+                  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-400"
                   onClick={() => signOut()}
                 >
                   Sign out
@@ -107,66 +125,92 @@ function Header({ toggleModalOpen }: Props) {
       >
         <Popover.Panel
           focus
-          className="absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+          className="absolute inset-x-0 top-0 z-10 origin-top-right transform p-2 transition md:hidden"
         >
-          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-slate-900">
+          <div className="divide-y-2 divide-gray-50 rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 dark:bg-slate-800">
             <div className="space-y-6 py-6 px-5">
-              <div className="grid grid-cols-2 gap-y-4 gap-x-8">
-                <button
-                  type="button"
-                  className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
-                  onClick={() => router.push('/')}
-                >
-                  Home
-                </button>
-
-                <button
-                  type="button"
-                  className="text-base font-medium text-gray-900 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-400"
-                  onClick={() => router.push('/')}
-                >
-                  Map
-                </button>
+              <div className="flex items-center justify-between">
+                <div className="flex justify-start lg:w-0 lg:flex-1">
+                  <Image
+                    src="/main_icon.png"
+                    alt="ヘッダーアイコン"
+                    width="50px"
+                    height="50px"
+                    className="cursor-pointer"
+                    onClick={() => router.push('/')}
+                  />
+                </div>
+                <div className="-mr-2">
+                  <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-slate-900">
+                    <span className="sr-only">Close menu</span>
+                    <XIcon className="h-6 w-6" aria-hidden="true" />
+                  </Popover.Button>
+                </div>
               </div>
-              <div>
+              <div className="mt-6">
+                <nav className="grid gap-y-8">
+                  {menuList.map((menu) => (
+                    <button
+                      type="button"
+                      className="-m-3 flex items-center rounded-md p-3"
+                      onClick={() => router.push('/')}
+                      key={menu.title}
+                    >
+                      <menu.icon
+                        className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
+                        aria-hidden="true"
+                      />
+                      <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
+                        {menu.title}
+                      </span>
+                    </button>
+                  ))}
+                </nav>
+              </div>
+              <div className="grid gap-4">
                 {status === 'authenticated' ? (
                   <>
-                    {session && session.user && session.user.image && (
-                      <div className="relative rounded-full">
-                        <Image
-                          src={
-                            process.env.NODE_ENV === `development`
-                              ? '/main_icon.png'
-                              : session?.user?.image
-                          }
-                          alt="user-icon"
-                          height={30}
-                          width={30}
-                          objectFit="contain"
-                        />
+                    {session && session.user && (
+                      <div className="-m-3 flex items-center rounded-md p-3">
+                        {session.user.image && (
+                          <Image
+                            src={getImageSrc(session.user.image)}
+                            alt="user-icon"
+                            height={30}
+                            width={30}
+                            objectFit="cover"
+                            className="h-6 w-6 flex-shrink-0 rounded-full"
+                          />
+                        )}
+                        <span
+                          className={`ml-3 text-base font-medium text-gray-900 dark:text-gray-300 ${
+                            session?.user?.image && `ml-4`
+                          }`}
+                        >
+                          {session?.user?.name}
+                        </span>
                       </div>
                     )}
-                    <p className="text-gray-700 dark:text-gray-300">{session?.user?.name}</p>
-                    <p className="mt-6 text-center text-base font-medium text-gray-500">
+                    <div className="mt-6 text-center text-base font-medium text-gray-500">
                       <button
                         type="button"
-                        className="text-indigo-600 hover:text-indigo-500"
+                        className="text-gray-500 dark:text-gray-300 "
                         onClick={() => signOut()}
                       >
                         Sign out
                       </button>
-                    </p>
+                    </div>
                   </>
                 ) : (
-                  <p className="mt-6 text-center text-base font-medium text-gray-500">
+                  <div className="mt-6 text-center text-base font-medium text-gray-500">
                     <button
                       type="button"
-                      className="text-indigo-600 hover:text-indigo-500"
+                      className="text-gray-500 dark:text-gray-300"
                       onClick={() => signIn()}
                     >
                       Sign in
                     </button>
-                  </p>
+                  </div>
                 )}
                 <button
                   type="button"
