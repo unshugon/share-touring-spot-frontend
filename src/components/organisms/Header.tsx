@@ -15,7 +15,6 @@ type Props = {
 function Header({ toggleModalOpen }: Props) {
   const { data: session, status } = useSession();
   const router = useRouter();
-
   return (
     <Popover className="relative bg-white dark:bg-slate-900">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
@@ -58,18 +57,19 @@ function Header({ toggleModalOpen }: Props) {
               onClick={() => toggleModalOpen(true)}
               className="inline-flex items-center justify-center whitespace-nowrap rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300"
             >
-              Post
+              投稿
             </button>
             {status === 'authenticated' ? (
               <>
                 {session && session.user && session.user.image && (
-                  <div className="relative ml-8 rounded-full">
+                  <div className="ml-8 rounded-full">
                     <Image
                       src={getImageSrc(session.user.image)}
                       alt="user-icon"
                       height={30}
                       width={30}
-                      objectFit="contain"
+                      className="rounded-full"
+                      objectFit="cover"
                     />
                   </div>
                 )}
@@ -173,7 +173,7 @@ function Header({ toggleModalOpen }: Props) {
                   onClick={() => toggleModalOpen(false)}
                   className="flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-base font-medium text-white shadow-sm hover:bg-indigo-700 dark:text-gray-300 dark:hover:text-gray-400"
                 >
-                  Post
+                  投稿
                 </button>
               </div>
             </div>
