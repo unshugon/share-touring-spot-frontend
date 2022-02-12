@@ -15,7 +15,7 @@ function PostCard({ post }: Props) {
 
   return (
     <div key={id} className="group relative">
-      <div className="min-h-80  w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
+      <div className="min-h-80 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
         <Image
           src={getImageSrc(image)}
           alt={title}
