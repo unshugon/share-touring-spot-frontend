@@ -14,6 +14,7 @@ const nextConfig = {
   },
   images: {
     domains: [
+      'localhost',
       'share-touring-spot-api.herokuapp.com',
       'share-touring-spot-api-assets.s3.amazonaws.com',
       'storage.googleapis.com',
