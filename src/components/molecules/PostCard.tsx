@@ -1,9 +1,10 @@
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
 import { useState } from 'react';
 import { Post } from '../../../utils/type';
-import { getImageSrc } from '../../../utils/utils';
-import Modal from '../organisms/Modal';
-import PostDetail from '../organisms/PostDetail';
+
+const Modal = dynamic(() => import('../organisms/Modal'));
+const PostDetail = dynamic(() => import('../organisms/PostDetail'));
 
 type Props = {
   post: Post;
@@ -15,14 +16,17 @@ function PostCard({ post }: Props) {
 
   return (
     <div key={id} className="group relative">
-      <div className="min-h-80 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:aspect-none lg:h-80">
+      <div className="min-h-80 aspect-w-1 aspect-h-1 relative w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 dark:bg-slate-800 lg:h-80">
         <Image
-          src={getImageSrc(image)}
+          src={image}
           alt={title}
-          layout="responsive"
+          layout="fill"
           objectFit="cover"
-          height="320px"
-          width="280px"
+          loading="lazy"
+          placeholder="blur"
+          blurDataURL={image}
+          lazyBoundary="100px"
+          className="h-full w-full object-cover object-center lg:h-full lg:w-full"
         />
       </div>
       <div className="mt-4 flex justify-between">

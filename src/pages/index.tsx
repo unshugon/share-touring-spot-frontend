@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable react/function-component-definition */
 import type { GetStaticProps, NextPage } from 'next';
+import dynamic from 'next/dynamic';
 import { useEffect } from 'react';
 import useSWR, { Fetcher, Key } from 'swr';
 import { Oval } from 'react-loader-spinner';
 import { API_BASE_URL } from '../../utils/constants';
 import { Post } from '../../utils/type';
 import { getAllPosts } from '../api/getPosts';
-import PostCard from '../components/molecules/PostCard';
+
+const PostCard = dynamic(() => import('../components/molecules/PostCard'));
 
 type Props = {
   fallbackPosts: Post[];
@@ -60,7 +62,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       posts: staticPosts,
     },
-    revalidate: 3,
+    revalidate: 1,
   };
 };
 

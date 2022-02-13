@@ -3,6 +3,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 
 import { useSession } from 'next-auth/react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { FormEvent, useCallback, useState } from 'react';
@@ -13,7 +14,8 @@ import sendPost from '../../api/sendPost';
 import { isLoadingState } from '../../atoms';
 import useInput from '../../hooks/useInput';
 import usePreviewImage from '../../hooks/usePreviewImage';
-import InputLocation from '../molecules/InputLocation';
+
+const InputLocation = dynamic(() => import('../molecules/InputLocation'));
 
 type Props = {
   toggleModalOpen: (state?: boolean) => void;
