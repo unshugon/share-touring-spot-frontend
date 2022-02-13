@@ -6,7 +6,6 @@ import { MenuIcon, XIcon, HomeIcon, MapIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import { getImageSrc } from '../../../utils/utils';
 
 type Props = {
   toggleModalOpen: (state?: boolean) => void;
@@ -79,7 +78,7 @@ function Header({ toggleModalOpen }: Props) {
                   <div className="-m-3 flex items-start p-3">
                     {session?.user?.image && (
                       <Image
-                        src={getImageSrc(session.user.image)}
+                        src={session.user.image}
                         alt="user-icon"
                         height={30}
                         width={30}
@@ -174,7 +173,7 @@ function Header({ toggleModalOpen }: Props) {
                       <div className="-m-3 flex items-center rounded-md p-3">
                         {session.user.image && (
                           <Image
-                            src={getImageSrc(session.user.image)}
+                            src={session.user.image}
                             alt="user-icon"
                             height={30}
                             width={30}

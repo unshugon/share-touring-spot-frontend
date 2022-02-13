@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { Post } from '../../../utils/type';
-import { getImageSrc } from '../../../utils/utils';
 
 type Props = {
   post: Post;
@@ -14,7 +13,7 @@ function PostDetail({ post }: Props) {
     <div className="grid w-full grid-cols-1 grid-rows-3 items-start gap-x-6 sm:grid-cols-12 sm:gap-y-8 md:grid-rows-none lg:gap-x-8">
       <div className="aspect-w-1 aspect-h-1 overflow-hidden rounded-lg bg-gray-100 dark:bg-slate-800 sm:col-span-4 md:aspect-w-2 md:aspect-h-3 lg:col-span-5">
         <Image
-          src={getImageSrc(image)}
+          src={image}
           layout="fill"
           objectFit="contain"
           alt={title}
