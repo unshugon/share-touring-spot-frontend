@@ -36,7 +36,7 @@ function Header({ toggleModalOpen }: Props) {
             <Image
               src="/main_icon.png"
               alt="ヘッダーアイコン"
-              width="50px"
+              width="47px"
               height="50px"
               className="cursor-pointer"
               onClick={() => router.push('/')}
