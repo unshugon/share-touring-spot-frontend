@@ -15,6 +15,7 @@ type Params = ParsedUrlQuery & {
 const PostDetail = dynamic(() => import('../../../components/organisms/PostDetail'));
 
 function PostDetailPage({ post }: Props) {
+  console.log(post);
   return (
     <div className="min-h-screen bg-gray-300 p-11 dark:bg-slate-900">
       <PostDetail post={post} />
@@ -25,6 +26,7 @@ function PostDetailPage({ post }: Props) {
 export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   const post = await getPost(params!.id);
+  console.log('post:', post);
 
   return {
     props: {
@@ -40,6 +42,7 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
       id: id.toString(),
     },
   }));
+  console.log('paths:', paths);
 
   return {
     paths,
