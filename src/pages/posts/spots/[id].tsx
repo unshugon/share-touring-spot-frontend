@@ -1,8 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import dynamic from 'next/dynamic';
 import { ParsedUrlQuery } from 'querystring';
 import { Post } from '../../../../utils/type';
 import { getAllPosts, getPost } from '../../../api/getPosts';
-import PostDetail from '../../../components/organisms/PostDetail';
 
 type Props = {
   post: Post;
@@ -12,6 +12,8 @@ type Params = ParsedUrlQuery & {
   id: string;
 };
 
+const PostDetail = dynamic(() => import('../../../components/organisms/PostDetail'));
+
 function PostDetailPage({ post }: Props) {
   return (
     <div className="min-h-screen bg-gray-300 p-11 dark:bg-slate-900">
@@ -19,8 +21,6 @@ function PostDetailPage({ post }: Props) {
     </div>
   );
 }
-
-export default PostDetailPage;
 
 export const getStaticProps: GetStaticProps<Props, Params> = async ({ params }) => {
   // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
@@ -46,3 +46,5 @@ export const getStaticPaths: GetStaticPaths<Params> = async () => {
     fallback: false,
   };
 };
+
+export default PostDetailPage;
