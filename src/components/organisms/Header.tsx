@@ -6,6 +6,7 @@ import { MenuIcon, XIcon, HomeIcon, MapIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = {
   toggleModalOpen: (state?: boolean) => void;
@@ -49,19 +50,16 @@ function Header({ toggleModalOpen }: Props) {
           </div>
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
             {menuList.map((menu) => (
-              <button
-                type="button"
-                className="-m-3 flex items-start rounded-lg p-3"
-                onClick={() => router.push(menu.link)}
-                key={menu.title}
-              >
-                <menu.icon className="h-6 w-6 flex-shrink-0 text-gray-300" aria-hidden="true" />
-                <div className="ml-4">
-                  <p className="text-base font-medium text-gray-900 dark:text-gray-300">
-                    {menu.title}
-                  </p>
-                </div>
-              </button>
+              <Link href={menu.link} key={menu.link}>
+                <a className="-m-3 flex items-start rounded-lg p-3">
+                  <menu.icon className="h-6 w-6 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                  <div className="ml-4">
+                    <p className="text-base font-medium text-gray-900 dark:text-gray-300">
+                      {menu.title}
+                    </p>
+                  </div>
+                </a>
+              </Link>
             ))}
           </Popover.Group>
           <div className="hidden items-center justify-end gap-4 md:flex md:flex-1 lg:w-0">
@@ -149,20 +147,17 @@ function Header({ toggleModalOpen }: Props) {
               <div className="mt-6">
                 <nav className="grid gap-y-8">
                   {menuList.map((menu) => (
-                    <button
-                      type="button"
-                      className="-m-3 flex items-center rounded-md p-3"
-                      onClick={() => router.push(menu.link)}
-                      key={menu.title}
-                    >
-                      <menu.icon
-                        className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
-                        aria-hidden="true"
-                      />
-                      <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
-                        {menu.title}
-                      </span>
-                    </button>
+                    <Link key={menu.link} href={menu.link}>
+                      <a className="-m-3 flex items-center rounded-md p-3">
+                        <menu.icon
+                          className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
+                          aria-hidden="true"
+                        />
+                        <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
+                          {menu.title}
+                        </span>
+                      </a>
+                    </Link>
                   ))}
                 </nav>
               </div>
