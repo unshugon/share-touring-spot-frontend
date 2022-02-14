@@ -147,17 +147,19 @@ function Header({ toggleModalOpen }: Props) {
               <div className="mt-6">
                 <nav className="grid gap-y-8">
                   {menuList.map((menu) => (
-                    <Link key={menu.link} href={menu.link}>
-                      <a className="-m-3 flex items-center rounded-md p-3">
-                        <menu.icon
-                          className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
-                          aria-hidden="true"
-                        />
-                        <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
-                          {menu.title}
-                        </span>
-                      </a>
-                    </Link>
+                    <Popover.Button key={menu.link}>
+                      <Link key={menu.link} href={menu.link}>
+                        <a className="-m-3 flex items-center rounded-md p-3">
+                          <menu.icon
+                            className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
+                            aria-hidden="true"
+                          />
+                          <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
+                            {menu.title}
+                          </span>
+                        </a>
+                      </Link>
+                    </Popover.Button>
                   ))}
                 </nav>
               </div>
