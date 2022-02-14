@@ -29,7 +29,7 @@ const Layout: React.FC<Props> = ({ children }: Props) => {
       <header>
         {!asPath.match(/auth\/signin/) && <Header toggleModalOpen={toggleModalOpen} />}
       </header>
-      <main className="min-h-screen">
+      <main className={`${!asPath.match(/auth\/signin/) ? `min-h-[1vh-100px]` : `min-h-screen`}`}>
         {children}
         <Modal open={open} setOpen={setOpen}>
           <PostNew toggleModalOpen={toggleModalOpen} />

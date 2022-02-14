@@ -6,6 +6,7 @@ import { MenuIcon, XIcon, HomeIcon, MapIcon } from '@heroicons/react/outline';
 import { useSession, signIn, signOut } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
+import Link from 'next/link';
 
 type Props = {
   toggleModalOpen: (state?: boolean) => void;
@@ -32,14 +33,17 @@ function Header({ toggleModalOpen }: Props) {
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
           <div className="flex justify-start lg:w-0 lg:flex-1">
-            <Image
-              src="/main_icon.png"
-              alt="ヘッダーアイコン"
-              width="47px"
-              height="50px"
-              className="cursor-pointer"
-              onClick={() => router.push('/')}
-            />
+            <Link href="/">
+              <a className="relative">
+                <Image
+                  src="/main_icon.png"
+                  alt="ヘッダーアイコン"
+                  height="50px"
+                  width="47px"
+                  className="h-8 w-auto sm:h-10"
+                />
+              </a>
+            </Link>
           </div>
           <div className="-my-2 -mr-2 md:hidden">
             <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 dark:bg-slate-900">
@@ -49,19 +53,16 @@ function Header({ toggleModalOpen }: Props) {
           </div>
           <Popover.Group as="nav" className="hidden space-x-10 md:flex">
             {menuList.map((menu) => (
-              <button
-                type="button"
-                className="-m-3 flex items-start rounded-lg p-3"
-                onClick={() => router.push(menu.link)}
-                key={menu.title}
-              >
-                <menu.icon className="h-6 w-6 flex-shrink-0 text-gray-300" aria-hidden="true" />
-                <div className="ml-4">
-                  <p className="text-base font-medium text-gray-900 dark:text-gray-300">
-                    {menu.title}
-                  </p>
-                </div>
-              </button>
+              <Link href={menu.link} key={menu.link}>
+                <a className="-m-3 flex items-start rounded-lg p-3">
+                  <menu.icon className="h-6 w-6 flex-shrink-0 text-gray-300" aria-hidden="true" />
+                  <div className="ml-4">
+                    <p className="text-base font-medium text-gray-900 dark:text-gray-300">
+                      {menu.title}
+                    </p>
+                  </div>
+                </a>
+              </Link>
             ))}
           </Popover.Group>
           <div className="hidden items-center justify-end gap-4 md:flex md:flex-1 lg:w-0">
@@ -149,20 +150,19 @@ function Header({ toggleModalOpen }: Props) {
               <div className="mt-6">
                 <nav className="grid gap-y-8">
                   {menuList.map((menu) => (
-                    <button
-                      type="button"
-                      className="-m-3 flex items-center rounded-md p-3"
-                      onClick={() => router.push(menu.link)}
-                      key={menu.title}
-                    >
-                      <menu.icon
-                        className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
-                        aria-hidden="true"
-                      />
-                      <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
-                        {menu.title}
-                      </span>
-                    </button>
+                    <Popover.Button key={menu.link}>
+                      <Link key={menu.link} href={menu.link}>
+                        <a className="-m-3 flex items-center rounded-md p-3">
+                          <menu.icon
+                            className="h-6 w-6 flex-shrink-0 text-gray-900 dark:text-gray-300"
+                            aria-hidden="true"
+                          />
+                          <span className="ml-3 text-base font-medium text-gray-900 dark:text-gray-300">
+                            {menu.title}
+                          </span>
+                        </a>
+                      </Link>
+                    </Popover.Button>
                   ))}
                 </nav>
               </div>
