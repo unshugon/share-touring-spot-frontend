@@ -1,10 +1,10 @@
 /* eslint-disable react/function-component-definition */
-import { GoogleMap, LoadScript, Marker, InfoWindow } from '@react-google-maps/api';
 import { GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import { useCallback, useEffect, useState } from 'react';
-import { Oval } from 'react-loader-spinner';
+import { useEffect, useState } from 'react';
 import useSWR, { Fetcher, Key } from 'swr';
+import { Oval } from 'react-loader-spinner';
+import { GoogleMap, LoadScript, MarkerClusterer, Marker } from '@react-google-maps/api';
 import { API_BASE_URL, GOOGLE_MAP_API_KEY } from '../../utils/constants';
 import { LocationType, Post } from '../../utils/type';
 import { getAllPosts } from '../api/getPosts';
@@ -16,6 +16,11 @@ type Props = {
 const containerStyle = {
   width: '100vw',
   height: 'calc(100vh - 100px)',
+};
+
+const clusterOptions = {
+  gridSize: 50,
+  maxZoom: 15,
 };
 
 const locationFetcher: Fetcher<LocationType> = () =>
@@ -32,25 +37,20 @@ const apiUrl: Key = '/posts/spots/list/';
 
 const Map: React.FC<Props> = ({ fallbackPosts: staticPosts }: Props) => {
   const router = useRouter();
-  const [centerState, setCenterState] = useState<LocationType | undefined>(undefined);
-  const [size, setSize] = useState<google.maps.Size | undefined>(undefined);
-  const { data: center } = useSWR('geolocation', locationFetcher);
+  const [centerState, setCenterState] = useState<LocationType>({
+    lat: 35.661641406637756,
+    lng: 139.74180042423825,
+  });
+  const { data: center } = useSWR<LocationType>('geolocation', locationFetcher);
   const { data: posts } = useSWR<Post[]>(apiUrl, postFetcher, {
     fallbackData: staticPosts,
   });
-  const infoWindowOptions = {
-    pixelOffset: size,
-  };
-
-  const createOffsetSize = useCallback(() => {
-    setSize(new window.google.maps.Size(0, -45));
-  }, []);
 
   useEffect(() => {
-    if (!centerState && posts) {
+    if (posts && center) {
       setCenterState(center);
     }
-  }, [center, centerState, posts]);
+  }, [center, posts]);
 
   if (!centerState) {
     return (
@@ -61,29 +61,41 @@ const Map: React.FC<Props> = ({ fallbackPosts: staticPosts }: Props) => {
   }
 
   return (
-    <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY} onLoad={() => createOffsetSize()}>
-      <GoogleMap mapContainerStyle={containerStyle} center={centerState} zoom={17}>
-        {posts &&
-          posts.map(
-            (post) =>
-              post.location && (
-                <button
-                  type="button"
-                  key={post.title}
-                  onClick={() => router.push(`/posts/spots/${post.id}`)}
-                >
-                  <Marker
-                    position={post.location}
-                    onClick={() => router.push(`/posts/spots/${post.id}`)}
-                  />
-                  <InfoWindow position={post.location} options={infoWindowOptions}>
-                    <div>
-                      <span>{post.title}</span>
-                    </div>
-                  </InfoWindow>
-                </button>
-              ),
-          )}
+    <LoadScript googleMapsApiKey={GOOGLE_MAP_API_KEY}>
+      <GoogleMap mapContainerStyle={containerStyle} center={centerState} zoom={9}>
+        {posts && (
+          <MarkerClusterer
+            options={clusterOptions}
+            averageCenter
+            styles={[
+              {
+                className: 'rounded-full bg-red-600 outline outline-white',
+                textColor: 'white',
+                height: 30,
+                width: 30,
+                url: '',
+              },
+            ]}
+          >
+            {(clusterer) =>
+              posts.map(
+                (post) =>
+                  post.location && (
+                    <Marker
+                      key={post.id}
+                      position={post.location}
+                      onClick={() => router.push(`/posts/spots/${post.id}`)}
+                      clusterer={clusterer}
+                      label={{
+                        text: post.title,
+                        className: 'bg-gray-50 p-2 rounded-md mb-16 text-gray-900',
+                      }}
+                    />
+                  ),
+              )
+            }
+          </MarkerClusterer>
+        )}
       </GoogleMap>
     </LoadScript>
   );
@@ -96,7 +108,7 @@ export const getStaticProps: GetStaticProps = async () => {
     props: {
       posts: staticPosts,
     },
-    revalidate: 3,
+    revalidate: 1,
   };
 };
 
