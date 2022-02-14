@@ -9,7 +9,7 @@ export default function Document() {
         <meta property="og:title" content="Share Touring Spot" />
         <meta property="og:description" content="ツーリングスポット共有サイトです。" />
         <meta property="og:site_name" content="ツーリングスポット共有サイトです。" />
-        <meta property="og:image" content="prod_favicon.svg" />
+        <meta property="og:image" content={process.env.FAVICON_URL} />
         <link rel="icon" href={process.env.FAVICON_URL} />
         <link rel="apple-touch-icon" href={process.env.FAVICON_URL} />
         <meta name="description" content="ツーリングスポット共有サイトです。" />
