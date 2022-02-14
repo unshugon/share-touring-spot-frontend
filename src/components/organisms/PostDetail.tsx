@@ -18,6 +18,7 @@ function PostDetail({ post }: Props) {
           objectFit="contain"
           alt={title}
           className="object-contain object-center"
+          priority
         />
       </div>
       <div className="sm:col-span-8 lg:col-span-7">
