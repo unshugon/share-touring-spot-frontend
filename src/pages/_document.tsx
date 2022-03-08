@@ -1,6 +1,8 @@
 import { Html, Head, Main, NextScript } from 'next/document';
 
 export default function Document() {
+  const GA_ID = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID || '';
+
   return (
     <Html lang="ja">
       <Head>
@@ -21,6 +23,21 @@ export default function Document() {
           rel="stylesheet"
         />
         <link rel="canonical" href="https://www.share-touring-spot.com/" />
+        {/* Global site tag (gtag.js) - Google Analytics */}
+        <script async src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} />
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+          }}
+        />
       </Head>
       <body>
         <Main />
